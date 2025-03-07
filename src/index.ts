@@ -38,33 +38,17 @@ export class Status {
 
     const app = express();
 
-    app.get(
-      '/health',
-      (request: express.Request, response: express.Response) => {
-        response
-          .status(self.options.successCode!)
-          .send(self.options.successBody);
-      }
-    );
-
-    app.get('/live', (request: express.Request, response: express.Response) => {
-      response.status(self.options.successCode!).send(self.options.successBody);
+    app.get('/health', (request, response) => {
+      self.onReady(request, response);
     });
 
-    app.get(
-      '/ready',
-      (request: express.Request, response: express.Response) => {
-        if (!self.started || self.stopped) {
-          response
-            .status(self.options.failureCode!)
-            .send(self.options.failureBody);
-        } else {
-          response
-            .status(self.options.successCode!)
-            .send(self.options.successBody);
-        }
-      }
-    );
+    app.get('/live', (request, response) => {
+      self.onLive(request, response);
+    });
+
+    app.get('/ready', (request, response) => {
+      self.onReady(request, response);
+    });
 
     process.on('SIGTERM', () => {
       self.stop();
@@ -78,6 +62,7 @@ export class Status {
   }
 
   start(): void {
+    this.options.logger?.info('Starting to pass the readiness probe...');
     this.started = true;
   }
 
@@ -88,6 +73,7 @@ export class Status {
       `Sleeping for ${self.options.graceBeforeSeconds} seconds...`
     );
     setTimeout(() => {
+      self.options.logger?.info('Starting to fail the readiness probe...');
       self.stopped = true;
       self.options.logger?.info(
         `Sleeping for ${self.options.graceAfterSeconds} seconds...`
@@ -97,5 +83,17 @@ export class Status {
         process.exit(0);
       }, 1000 * self.options.graceAfterSeconds!);
     }, 1000 * self.options.graceBeforeSeconds!);
+  }
+
+  private onLive(request: express.Request, response: express.Response): void {
+    response.status(this.options.successCode!).send(this.options.successBody);
+  }
+
+  private onReady(request: express.Request, response: express.Response): void {
+    if (!this.started || this.stopped) {
+      response.status(this.options.failureCode!).send(this.options.failureBody);
+    } else {
+      response.status(this.options.successCode!).send(this.options.successBody);
+    }
   }
 }

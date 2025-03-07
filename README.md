@@ -11,8 +11,8 @@ npm install @thetypefounders/container-well-being --save
 ## Usage
 
 ```javascript
-import express from 'express';
 import { Status } from '@thetypefounders/container-well-being';
+import express from 'express';
 
 const status = new Status({
   // The host to bind to.
