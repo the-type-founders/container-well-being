@@ -56,7 +56,7 @@ export class Status {
 
     const server = app.listen(self.options.port!, self.options.host!, () => {
       self.options.logger?.info(
-        `Listening on http://${self.options.host}:${self.options.port} for status...`
+        `Listening on http://${self.options.host}:${self.options.port} for probes...`
       );
     });
   }
