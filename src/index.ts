@@ -1,4 +1,5 @@
 import express from 'express';
+import * as http from 'http';
 
 export interface Logger {
   info(message: string): void;
@@ -13,6 +14,7 @@ export interface Options {
   failureBody?: string;
   successCode?: number;
   failureCode?: number;
+  exitCode?: number;
   logger?: Logger;
 }
 
@@ -23,6 +25,7 @@ const defaultOptions: Options = {
   graceAfterSeconds: 0,
   successCode: 200,
   failureCode: 500,
+  exitCode: 0,
   logger: console,
 };
 
@@ -31,34 +34,50 @@ export class Status {
   started: boolean = false;
   stopped: boolean = false;
 
+  app: express.Express;
+  server: http.Server;
+
   constructor(givenOptions: Options = defaultOptions) {
     const self = this;
 
     this.options = { ...defaultOptions, ...givenOptions };
 
-    const app = express();
+    this.app = express();
 
-    app.get('/health', (request, response) => {
-      self.onReady(request, response);
-    });
+    this.app.get(
+      '/health',
+      (request: express.Request, response: express.Response) => {
+        self.onReady(request, response);
+      }
+    );
 
-    app.get('/live', (request, response) => {
-      self.onLive(request, response);
-    });
+    this.app.get(
+      '/live',
+      (request: express.Request, response: express.Response) => {
+        self.onLive(request, response);
+      }
+    );
 
-    app.get('/ready', (request, response) => {
-      self.onReady(request, response);
-    });
+    this.app.get(
+      '/ready',
+      (request: express.Request, response: express.Response) => {
+        self.onReady(request, response);
+      }
+    );
 
     process.on('SIGTERM', () => {
       self.stop();
     });
 
-    const server = app.listen(self.options.port!, self.options.host!, () => {
-      self.options.logger?.info(
-        `Listening on http://${self.options.host}:${self.options.port} for probes...`
-      );
-    });
+    this.server = this.app
+      .listen(self.options.port!, self.options.host!, () => {
+        self.options.logger?.info(
+          `Listening on http://${self.options.host}:${self.options.port} for probes...`
+        );
+      })
+      .on('error', (error) => {
+        console.error(`Encountered an error: ${error}.`);
+      });
   }
 
   start(): void {
@@ -80,7 +99,9 @@ export class Status {
       );
       setTimeout(() => {
         self.options.logger?.info('Well done.');
-        process.exit(0);
+        if (self.options.exitCode !== undefined) {
+          process.exit(self.options.exitCode);
+        }
       }, 1000 * self.options.graceAfterSeconds!);
     }, 1000 * self.options.graceBeforeSeconds!);
   }
