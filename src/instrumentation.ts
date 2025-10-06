@@ -1,11 +1,8 @@
 import express from 'express';
 import * as http from 'http';
 import client from 'prom-client';
-import { Counter, Gauge, Histogram } from 'prom-client';
 
 import { Logger } from './common.js';
-
-export { Counter, Gauge, Histogram };
 
 export interface Options {
   host?: string;
@@ -22,10 +19,6 @@ const defaultOptions: Options = {
 };
 
 export class Client {
-  static Counter = Counter;
-  static Gauge = Gauge;
-  static Histogram = Histogram;
-
   options: Options;
 
   app: express.Express;

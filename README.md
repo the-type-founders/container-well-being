@@ -11,7 +11,11 @@ npm install @thetypefounders/container-well-being --save
 ## Usage
 
 ```javascript
-import { Instrumentation, Status } from '@thetypefounders/container-well-being';
+import {
+  Counter,
+  Instrumentation,
+  Status,
+} from '@thetypefounders/container-well-being';
 import express from 'express';
 
 const status = new Status({

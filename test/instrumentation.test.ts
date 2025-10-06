@@ -1,10 +1,10 @@
 import { beforeAll, expect, test } from 'vitest';
 
-import { Instrumentation } from '../src/index.ts';
+import { Counter, Instrumentation } from '../src/index.ts';
 
 const instrumentation = new Instrumentation();
 
-const counter = new Instrumentation.Counter({
+const counter = new Counter({
   name: 'example_counter',
   help: 'Example of a counter',
 });

@@ -1,6 +1,6 @@
 {
   "name": "@thetypefounders/container-well-being",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "license": "Apache-2.0",
   "author": "Ivan Ukhov <ivan.ukhov@gmail.com>",
   "description": "Probes and metrics for containers on Kubernetes",
@@ -9,22 +9,8 @@
     "url": "https://github.com/the-type-founders/container-well-being.git"
   },
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./instrumentation.js": {
-      "types": "./dist/instrumentation.d.ts",
-      "default": "./dist/instrumentation.js"
-    },
-    "./status.js": {
-      "types": "./dist/status.d.ts",
-      "default": "./dist/status.js"
-    }
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "express": "^5.1.0",
     "prom-client": "^15.1.3"
