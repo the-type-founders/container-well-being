@@ -1,9 +1,9 @@
 {
   "name": "@thetypefounders/container-well-being",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "license": "Apache-2.0",
   "author": "Ivan Ukhov <ivan.ukhov@gmail.com>",
-  "description": "Standard checks and probes for containers on Kubernetes",
+  "description": "Probes and metrics for containers on Kubernetes",
   "repository": {
     "type": "git",
     "url": "https://github.com/the-type-founders/container-well-being.git"
@@ -12,15 +12,16 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "prom-client": "^15.1.3"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.14.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.2",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "build": "tsc",
