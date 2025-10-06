@@ -1,6 +1,6 @@
 {
   "name": "@thetypefounders/container-well-being",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "Apache-2.0",
   "author": "Ivan Ukhov <ivan.ukhov@gmail.com>",
   "description": "Probes and metrics for containers on Kubernetes",
